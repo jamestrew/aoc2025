@@ -1,5 +1,6 @@
 #include "util.h"
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,6 +35,8 @@ int *parse_instruction(const char *input, int *count) {
   return instructions;
 }
 
+int floor_div(int a, int b) { return (int)floor((double)a / b); }
+
 int part1(const char *input) {
   int instr_count = 0;
   int *instructions = parse_instruction(input, &instr_count);
@@ -55,7 +58,34 @@ int part1(const char *input) {
   return zeroed_count;
 }
 
-int part2(const char *input) { return 0; }
+int part2(const char *input) {
+  int instr_count = 0;
+  int *instructions = parse_instruction(input, &instr_count);
+
+  int curr_pos = 50;
+  int zeroed_count = 0;
+
+  for (int i = 0; i < instr_count; ++i) {
+    int clicks = instructions[i];
+    if (clicks == 0)
+      continue;
+
+    int end_pos = curr_pos + clicks;
+
+    if (clicks > 0) {
+      zeroed_count += floor_div(end_pos, DIAL_POSITIONS) -
+                      floor_div(curr_pos, DIAL_POSITIONS);
+    } else {
+      zeroed_count += floor_div(curr_pos - 1, DIAL_POSITIONS) -
+                      floor_div(end_pos - 1, DIAL_POSITIONS);
+    }
+
+    curr_pos = end_pos;
+  }
+
+  free(instructions);
+  return zeroed_count;
+}
 
 void test() {
   const char *test_input = "L68\n"
@@ -70,7 +100,7 @@ void test() {
                            "L82";
 
   assert(part1(test_input) == 3);
-  assert(part2(test_input) == 0);
+  assert(part2(test_input) == 6);
   printf("All tests passed!\n");
 }
 
