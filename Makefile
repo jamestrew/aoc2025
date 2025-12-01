@@ -1,32 +1,29 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -g -fPIC
+LDFLAGS = -ldl -lm
 SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = bin
 
 UTIL_OBJ = $(BUILD_DIR)/util.o
-
-DAY_SOURCES = $(wildcard $(SRC_DIR)/day*.c)
-DAY_BINS = $(patsubst $(SRC_DIR)/day%.c,$(BIN_DIR)/day%,$(DAY_SOURCES))
+DAY_SOURCES = $(filter-out $(SRC_DIR)/day0.c $(SRC_DIR)/main.c, $(wildcard $(SRC_DIR)/day[0-9]*.c))
+DAY_LIBS = $(patsubst $(SRC_DIR)/day%.c,$(BIN_DIR)/libday%.so,$(DAY_SOURCES))
 
 .PHONY: all clean
 
-all: $(DAY_BINS)
-
-gen%:
-	./scripts/gen_day.sh $*
+all: aoc $(DAY_LIBS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BIN_DIR)/day%: $(BUILD_DIR)/day%.o $(UTIL_OBJ) | $(BIN_DIR)
-	$(CC) $(CFLAGS) $^ -o $@
+$(BIN_DIR)/libday%.so: $(BUILD_DIR)/day%.o $(UTIL_OBJ) | $(BIN_DIR)
+	$(CC) -shared $^ -o $@ -lm
+
+aoc: $(BUILD_DIR)/main.o $(UTIL_OBJ) | $(BIN_DIR)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(BUILD_DIR) $(BIN_DIR):
 	mkdir -p $@
 
-run%: $(BIN_DIR)/day%
-	./$<
-
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -rf $(BUILD_DIR) $(BIN_DIR) aoc

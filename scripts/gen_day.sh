@@ -13,7 +13,7 @@ if [ -f "$OUTPUT_FILE" ]; then
     exit 1
 fi
 
-sed "s/read_day_input(0)/read_day_input($DAY)/" src/day0.c > "$OUTPUT_FILE"
+cp src/day0.c "$OUTPUT_FILE"
 
 echo "Generated $OUTPUT_FILE"
 

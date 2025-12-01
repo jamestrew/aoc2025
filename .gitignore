@@ -4,3 +4,4 @@ inputs/day*
 .env
 *.o
 compile_commands.json
+aoc

@@ -99,24 +99,7 @@ void test() {
                            "R14\n"
                            "L82";
 
-  assert(part1(test_input) == 3);
-  assert(part2(test_input) == 6);
+  ASSERT_EQ(3, part1(test_input));
+  ASSERT_EQ(6, part2(test_input));
   printf("All tests passed!\n");
-}
-
-int main() {
-  printf("here we go...");
-  test();
-
-  char *input = read_day_input(1);
-  if (!input) {
-    fprintf(stderr, "Failed to read input\n");
-    return 1;
-  }
-
-  printf("Part 1: %d\n", part1(input));
-  printf("Part 2: %d\n", part2(input));
-
-  free(input);
-  return 0;
 }

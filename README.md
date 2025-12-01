@@ -17,24 +17,23 @@ AOC_YEAR=2025
 
 1. Login to [adventofcode.com](https://adventofcode.com)
 2. Open browser dev tools (F12)
-3. Go to Application/Storage -> Cookies -> https://adventofcode.com
+3. Go to Application/Storage -> Cookies -> <https://adventofcode.com>
 4. Copy value of `session` cookie
 5. Paste into `.env` as `AOC_SESSION`
 
-## Quick Start
+## Usage
 
-Generate code + fetch input for day N:
+Build main executable:
 
 ```bash
-make gen1   # day 1
-make gen15  # day 15
+make
 ```
 
-Run a day's solution:
+Run a day (auto-generates + builds if needed):
 
 ```bash
-make run1   # builds and runs day 1
-make run15  # builds and runs day 15
+./aoc <day>              # generate data/solution file, run tests + both parts
+./aoc <day> --submit <part>  # submit answer for part 1 or 2
 ```
 
 ## Structure
@@ -42,13 +41,16 @@ make run15  # builds and runs day 15
 ```
 src/        Solution files (day1.c, day2.c, etc.) + utilities
 inputs/     Puzzle input files (auto-fetched)
-bin/        Compiled executables (git-ignored)
+bin/        Compiled shared libraries (git-ignored)
 build/      Object files (git-ignored)
 scripts/    Generation and fetch automation
 ```
 
 ## Workflow
 
-1. `make gen1` - creates src/day1.c, fetches inputs/day1
-2. Edit src/day1.c - implement part1() and part2()
-3. `make run1` - test + run solution
+1. `./aoc 1` - auto-generates src/day1.c, fetches input, builds, runs
+2. Edit src/day1.c - implement part1()
+3. `./aoc 1` - rebuild + run
+4. `./aoc 1 --submit 1` - submit part 1 answer
+5. Edit src/day1.c - implement part2()
+6. `./aoc 1 --submit 2` - submit part 2 answer
