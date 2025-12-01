@@ -14,16 +14,15 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
-AOC_SESSION=$(grep "^AOC_SESSION=" .env | cut -d'=' -f2)
-AOC_YEAR=$(grep "^AOC_YEAR=" .env | cut -d'=' -f2)
+source .env
 
 if [ -z "$AOC_SESSION" ]; then
-    echo "Error: AOC_SESSION not found in .env" >&2
+    echo "Error: AOC_SESSION not set in .env" >&2
     exit 1
 fi
 
 if [ -z "$AOC_YEAR" ]; then
-    echo "Error: AOC_YEAR not found in .env" >&2
+    echo "Error: AOC_YEAR not set in .env" >&2
     exit 1
 fi
 
