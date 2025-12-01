@@ -53,20 +53,7 @@ char **read_day_lines(int day, int *line_count) {
     return NULL;
   }
 
-  int capacity = 16;
-  char **lines = malloc(capacity * sizeof(char *));
-  *line_count = 0;
-
-  char *line = strtok(content, "\n");
-  while (line) {
-    if (*line_count >= capacity) {
-      capacity *= 2;
-      lines = realloc(lines, capacity * sizeof(char *));
-    }
-    lines[*line_count] = strdup(line);
-    (*line_count)++;
-    line = strtok(NULL, "\n");
-  }
+  char **lines = split(content, "\n", line_count);
 
   free(content);
   return lines;
@@ -88,16 +75,25 @@ void trim(char *str) {
   }
 }
 
-int split(char *str, const char *delim, char **tokens, int max_tokens) {
-  int count = 0;
-  char *token = strtok(str, delim);
+char **split(const char *str, const char *delim, int *count) {
+  int capacity = 16;
+  char **res = malloc(capacity * sizeof(char *));
+  *count = 0;
 
-  while (token && count < max_tokens) {
-    tokens[count++] = token;
+  char *s = strdup(str);
+  char *token = strtok(s, delim);
+  while (token) {
+    if (*count >= capacity) {
+      capacity *= 2;
+      res = realloc(res, capacity * sizeof(char *));
+    }
+    res[*count] = strdup(token);
+    (*count)++;
     token = strtok(NULL, delim);
   }
 
-  return count;
+  free(s);
+  return res;
 }
 
 void free_lines(char **lines, int count) {
