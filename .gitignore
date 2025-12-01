@@ -1,0 +1,6 @@
+bin/
+build/
+inputs/day*
+.env
+*.o
+compile_commands.json
