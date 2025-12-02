@@ -31,7 +31,7 @@ int *parse_instruction(const char *input, int *count) {
     instructions[i] = dir * clicks;
   }
 
-  free(lines);
+  free_lines(lines, *count);
   return instructions;
 }
 
