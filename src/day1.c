@@ -1,6 +1,5 @@
 #include "util.h"
 #include <assert.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,7 +34,6 @@ int *parse_instruction(const char *input, int *count) {
   return instructions;
 }
 
-int floor_div(int a, int b) { return (int)floor((double)a / b); }
 
 int part1(const char *input) {
   int instr_count = 0;

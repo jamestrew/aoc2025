@@ -1,5 +1,6 @@
 #include "util.h"
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,3 +103,17 @@ void free_lines(char **lines, int count) {
   }
   free(lines);
 }
+
+int min(int a, int b) { return a < b ? a : b; }
+
+int max(int a, int b) { return a > b ? a : b; }
+
+int clamp(int x, int lo, int hi) {
+  if (x < lo)
+    return lo;
+  if (x > hi)
+    return hi;
+  return x;
+}
+
+int floor_div(int a, int b) { return (int)floor((double)a / b); }

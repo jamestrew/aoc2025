@@ -13,6 +13,11 @@ char **split(const char *str, const char *delim, int *count);
 
 void free_lines(char **lines, int count);
 
+int min(int a, int b);
+int max(int a, int b);
+int clamp(int x, int lo, int hi);
+int floor_div(int a, int b);
+
 #define ASSERT_EQ(expected, actual) \
   do { \
     long long exp = (long long)(expected); \
