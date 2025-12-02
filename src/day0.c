@@ -1,9 +1,10 @@
 #include "util.h"
+#include <stdint.h>
 #include <stdio.h>
 
-int part1(const char *input) { return 0; }
+uint64_t part1(const char *input) { return 0; }
 
-int part2(const char *input) { return 0; }
+uint64_t part2(const char *input) { return 0; }
 
 void test() {
   const char *test_input = "test data here";

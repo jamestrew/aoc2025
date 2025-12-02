@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <dlfcn.h>
 #include <unistd.h>
 #include "util.h"
 
 typedef void (*test_fn_t)(void);
-typedef int (*solution_fn_t)(const char*);
+typedef uint64_t (*solution_fn_t)(const char*);
 
 void print_usage(const char* prog) {
     fprintf(stderr, "Usage: %s <day> [--submit <part>]\n", prog);
@@ -107,17 +108,17 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    int result1 = part1_fn(input);
-    printf("Part 1: %d\n", result1);
+    uint64_t result1 = part1_fn(input);
+    printf("Part 1: %lu\n", result1);
 
-    int result2 = part2_fn(input);
-    printf("Part 2: %d\n", result2);
+    uint64_t result2 = part2_fn(input);
+    printf("Part 2: %lu\n", result2);
 
     if (submit_flag) {
         char submit_cmd[512];
-        int result = (submit_part == 1) ? result1 : result2;
+        uint64_t result = (submit_part == 1) ? result1 : result2;
         snprintf(submit_cmd, sizeof(submit_cmd),
-                 "./scripts/submit_answer.sh %d %d %d",
+                 "./scripts/submit_answer.sh %d %d %lu",
                  day, submit_part, result);
         printf("Submitting: %s\n", submit_cmd);
         system(submit_cmd);

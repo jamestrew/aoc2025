@@ -1,5 +1,6 @@
 #include "util.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,7 +36,7 @@ int *parse_instruction(const char *input, int *count) {
 }
 
 
-int part1(const char *input) {
+uint64_t part1(const char *input) {
   int instr_count = 0;
   int *instructions = parse_instruction(input, &instr_count);
 
@@ -56,7 +57,7 @@ int part1(const char *input) {
   return zeroed_count;
 }
 
-int part2(const char *input) {
+uint64_t part2(const char *input) {
   int instr_count = 0;
   int *instructions = parse_instruction(input, &instr_count);
 
