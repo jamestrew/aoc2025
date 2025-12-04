@@ -5,39 +5,43 @@
 #include <stdlib.h>
 #include <string.h>
 
-uint64_t part1(const char *input) {
+uint64_t joltage_sum(const char *input, int battery_count) {
   int line_count = 0;
   char **lines = split(input, "\n", &line_count);
   uint64_t sum = 0;
+  char *digits = calloc(battery_count + 1, sizeof(char));
 
   for (int i = 0; i < line_count; ++i) {
-    char *line = lines[i];
+    char *bank = lines[i];
+    size_t bank_size = strlen(bank);
 
-    int num = 0;
-    size_t digitpos = 0;
-    char digit1 = 0;
-    for (size_t j = 0; j < strlen(line) - 1; ++j) {
-      if (line[j] > digit1) {
-        digitpos = j;
-        digit1 = line[j];
+    int search_start_idx = 0;
+
+    for (int bidx = 0; bidx < battery_count; ++bidx) {
+      int search_end_idx = bank_size - battery_count + bidx;
+      char maxdigit = 0;
+      for (int i = search_start_idx; i <= search_end_idx; ++i) {
+        if (bank[i] > maxdigit) {
+          maxdigit = bank[i];
+          search_start_idx = i;
+        }
       }
+
+      digits[bidx] = maxdigit;
+      search_start_idx++;
     }
 
-    char digit2 = 0;
-    for (size_t j = digitpos + 1; j < strlen(line); ++j) {
-      if (line[j] > digit2) {
-        digit2 = line[j];
-      }
-    }
-
-    sum += (uint64_t)numfromchars(2, digit1, digit2);
+    sum += strtoull(digits, NULL, 10);
   }
 
+  free(digits);
   free_lines(lines, line_count);
   return sum;
 }
 
-uint64_t part2(const char *input) { return 0; }
+uint64_t part1(const char *input) { return joltage_sum(input, 2); }
+
+uint64_t part2(const char *input) { return joltage_sum(input, 12); }
 
 void test() {
   const char *test_input = "987654321111111\n"
@@ -45,6 +49,6 @@ void test() {
                            "234234234234278\n"
                            "818181911112111";
   ASSERT_EQ(357, part1(test_input));
-  /* ASSERT_EQ(3121910778619, part2(test_input)); */
+  ASSERT_EQ(3121910778619, part2(test_input));
   printf("All tests passed!\n");
 }
