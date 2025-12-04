@@ -1,6 +1,7 @@
 #include "util.h"
 #include <ctype.h>
 #include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -117,3 +118,17 @@ int clamp(int x, int lo, int hi) {
 }
 
 int floor_div(int a, int b) { return (int)floor((double)a / b); }
+
+int numfromchars(int count, ...) {
+  va_list args;
+  va_start(args, count);
+
+  int res = 0;
+  for (int i = 0; i < count; ++i) {
+    int digit = va_arg(args, int);
+    res = (10 * res) + (digit - '0');
+  }
+
+  va_end(args);
+  return res;
+}

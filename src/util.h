@@ -18,6 +18,8 @@ int max(int a, int b);
 int clamp(int x, int lo, int hi);
 int floor_div(int a, int b);
 
+int numfromchars(int count, ...);
+
 #define ASSERT_EQ(expected, actual) \
   do { \
     long long exp = (long long)(expected); \
