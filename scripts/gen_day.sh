@@ -13,7 +13,7 @@ if [ -f "$OUTPUT_FILE" ]; then
     exit 1
 fi
 
-cp src/day0.c "$OUTPUT_FILE"
+sed "s/DAY = 0/DAY = $DAY/" src/day0.c > "$OUTPUT_FILE"
 
 echo "Generated $OUTPUT_FILE"
 

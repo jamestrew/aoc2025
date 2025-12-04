@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -fPIC
+RELEASE_CFLAGS = -Wall -Wextra -O2 -DNDEBUG -fPIC
 LDFLAGS = -ldl -lm
 SRC_DIR = src
 BUILD_DIR = build
@@ -21,6 +22,9 @@ $(BIN_DIR)/libday%.so: $(BUILD_DIR)/day%.o $(UTIL_OBJ) | $(BIN_DIR)
 
 aoc: $(BUILD_DIR)/main.o $(UTIL_OBJ) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+day%: $(SRC_DIR)/day%.c $(UTIL_OBJ) | $(BIN_DIR)
+	$(CC) $(RELEASE_CFLAGS) $< $(UTIL_OBJ) -o $(BIN_DIR)/$@ -lm
 
 $(BUILD_DIR) $(BIN_DIR):
 	mkdir -p $@

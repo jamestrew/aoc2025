@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+const int DAY = 2;
 const int UNLIMITED_REPEATS = 20; // max 20 digits
 
 typedef struct {
@@ -115,4 +116,10 @@ void test() {
   ASSERT_EQ(33, invalid_id_sum("11-22", 2));
   ASSERT_EQ(4174379265, part2(test_input));
   printf("All tests passed!\n");
+}
+
+int main() {
+  char *input = read_day_input(DAY);
+  printf("Part 1: %lu\n", part1(input));
+  printf("Part 2: %lu\n", part2(input));
 }

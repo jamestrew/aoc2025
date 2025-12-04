@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-const int DAY = 0;
+const int DAY = 4;
 
 uint64_t part1(const char *input) { return 0; }
 
