@@ -9,12 +9,12 @@ uint64_t joltage_sum(const char *input, int battery_count) {
   int line_count = 0;
   char **lines = split(input, "\n", &line_count);
   uint64_t sum = 0;
-  char *digits = calloc(battery_count + 1, sizeof(char));
 
   for (int i = 0; i < line_count; ++i) {
     char *bank = lines[i];
     size_t bank_size = strlen(bank);
 
+    uint64_t joltage = 0;
     int search_start_idx = 0;
 
     for (int bidx = 0; bidx < battery_count; ++bidx) {
@@ -27,14 +27,13 @@ uint64_t joltage_sum(const char *input, int battery_count) {
         }
       }
 
-      digits[bidx] = maxdigit;
+      joltage = (joltage * 10) + (maxdigit - '0');
       search_start_idx++;
     }
 
-    sum += strtoull(digits, NULL, 10);
+    sum += joltage;
   }
 
-  free(digits);
   free_lines(lines, line_count);
   return sum;
 }
@@ -51,4 +50,11 @@ void test() {
   ASSERT_EQ(357, part1(test_input));
   ASSERT_EQ(3121910778619, part2(test_input));
   printf("All tests passed!\n");
+}
+
+int main() {
+  char *input = read_day_input(3);
+
+  printf("Part 1: %lu\n", part1(input));
+  printf("Part 2: %lu\n", part2(input));
 }
