@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g -fPIC
-RELEASE_CFLAGS = -Wall -Wextra -O2 -DNDEBUG -fPIC
+CFLAGS = -Wall -Wextra -Wconversion -g -fPIC
+RELEASE_CFLAGS = -Wall -Wextra -Wconversion -O2 -DNDEBUG -fPIC
 LDFLAGS = -ldl -lm
 SRC_DIR = src
 BUILD_DIR = build
