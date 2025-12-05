@@ -6,12 +6,12 @@
 #include <string.h>
 
 char *read_day_input(int day);
-char **read_day_lines(int day, int *line_count);
+char **read_day_lines(int day, size_t *line_count);
 
 void trim(char *str);
-char **split(const char *str, const char *delim, int *count);
+char **split(const char *str, const char *delim, size_t *count);
 
-void free_lines(char **lines, int count);
+void free_lines(char **lines, size_t count);
 
 int min(int a, int b);
 int max(int a, int b);

@@ -12,7 +12,7 @@ static char *read_file_internal(const char *filename) {
     return NULL;
 
   fseek(f, 0, SEEK_END);
-  long size = ftell(f);
+  size_t size = (size_t)ftell(f);
   fseek(f, 0, SEEK_SET);
 
   char *buffer = malloc(size + 1);
@@ -48,7 +48,7 @@ char *read_day_input(int day) {
   return content;
 }
 
-char **read_day_lines(int day, int *line_count) {
+char **read_day_lines(int day, size_t *line_count) {
   char *content = read_day_input(day);
   if (!content) {
     *line_count = 0;
@@ -77,8 +77,8 @@ void trim(char *str) {
   }
 }
 
-char **split(const char *str, const char *delim, int *count) {
-  int capacity = 16;
+char **split(const char *str, const char *delim, size_t *count) {
+  size_t capacity = 16;
   char **res = malloc(capacity * sizeof(char *));
   *count = 0;
 
@@ -98,8 +98,8 @@ char **split(const char *str, const char *delim, int *count) {
   return res;
 }
 
-void free_lines(char **lines, int count) {
-  for (int i = 0; i < count; i++) {
+void free_lines(char **lines, size_t count) {
+  for (size_t i = 0; i < count; i++) {
     free(lines[i]);
   }
   free(lines);
