@@ -17,7 +17,9 @@ void test() {
 
 
 int main() {
+  test();
   char *input = read_day_input(DAY);
   printf("Part 1: %lu\n", part1(input));
   printf("Part 2: %lu\n", part2(input));
+  free(input);
 }
