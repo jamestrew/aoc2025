@@ -132,3 +132,27 @@ int numfromchars(int count, ...) {
   va_end(args);
   return res;
 }
+
+void quicksort(int *arr, size_t len) {
+  if (len < 2)
+    return;
+
+  int pivot = arr[len / 2];
+  size_t i = 0, j = len - 1;
+  while (1) {
+    while (arr[i] < pivot)
+      i++;
+    while (arr[j] > pivot)
+      j--;
+    if (i >= j)
+      break;
+
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+    i++;
+    j--;
+  }
+  quicksort(arr, i);
+  quicksort(arr + i, len - i);
+}

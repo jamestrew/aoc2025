@@ -8,6 +8,7 @@ BUILD_DIR = build
 BIN_DIR = bin
 
 UTIL_OBJ = $(BUILD_DIR)/util.o
+UTIL_DEBUG_OBJ = $(BUILD_DIR)/util.debug.o
 DAY_SOURCES = $(filter-out $(SRC_DIR)/day0.c $(SRC_DIR)/main.c, $(wildcard $(SRC_DIR)/day[0-9]*.c))
 DAY_LIBS = $(patsubst $(SRC_DIR)/day%.c,$(BIN_DIR)/libday%.so,$(DAY_SOURCES))
 
@@ -27,8 +28,11 @@ aoc: $(BUILD_DIR)/main.o $(UTIL_OBJ) | $(BIN_DIR)
 day%: $(SRC_DIR)/day%.c $(UTIL_OBJ) | $(BIN_DIR)
 	$(CC) $(RELEASE_CFLAGS) $< $(UTIL_OBJ) -o $(BIN_DIR)/$@ -lm
 
-debug%: $(SRC_DIR)/day%.c $(UTIL_OBJ) | $(BIN_DIR)
-	$(CC) $(DEBUG_CFLAGS) $< $(UTIL_OBJ) -o $(BIN_DIR)/$@ -lm
+$(UTIL_DEBUG_OBJ): $(SRC_DIR)/util.c | $(BUILD_DIR)
+	$(CC) $(DEBUG_CFLAGS) -c $< -o $@
+
+debug%: $(SRC_DIR)/day%.c $(UTIL_DEBUG_OBJ) | $(BIN_DIR)
+	$(CC) $(DEBUG_CFLAGS) $< $(UTIL_DEBUG_OBJ) -o $(BIN_DIR)/$@ -lm
 
 $(BUILD_DIR) $(BIN_DIR):
 	mkdir -p $@
