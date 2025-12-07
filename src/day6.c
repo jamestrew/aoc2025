@@ -2,22 +2,43 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const int DAY = 6;
 
 typedef struct {
   char operator;
-  int *operand;
+  int *operands;
   size_t operand_size;
 } Equation;
 
+void debug_equations(const Equation *eqs, size_t count) {
+  for (size_t i = 0; i < count; i++) {
+    const Equation *e = &eqs[i];
+
+    printf("Equation %zu:\n", i);
+    printf("  operator: %c\n", e->operator);
+    printf("  operands (%zu): ", e->operand_size);
+
+    if (e->operands == NULL) {
+      printf("(null)\n");
+    } else {
+      for (size_t j = 0; j < e->operand_size; j++) {
+        printf("%d", e->operands[j]);
+        if (j + 1 < e->operand_size)
+          printf(", ");
+      }
+      printf("\n");
+    }
+  }
+}
+
 void free_equations(Equation *eqs, size_t count) {
   for (size_t i = 0; i < count; ++i) {
-    free(eqs[i].operand);
+    free(eqs[i].operands);
   }
   free(eqs);
 }
-
 
 Equation *part1_parse_input(const char *input, size_t *count) {
   size_t line_count = 0;
@@ -28,8 +49,8 @@ Equation *part1_parse_input(const char *input, size_t *count) {
   size_t operands = line_count - 1;
 
   for (size_t i = 0; i < *count; ++i) {
-    eqs[i].operand = malloc(operands * sizeof(int));
-    eqs[i].operand[0] = atoi(first_parts[i]);
+    eqs[i].operands = malloc(operands * sizeof(int));
+    eqs[i].operands[0] = atoi(first_parts[i]);
     eqs[i].operand_size = operands;
   }
   free_lines(first_parts, *count);
@@ -37,7 +58,7 @@ Equation *part1_parse_input(const char *input, size_t *count) {
   for (size_t i = 1; i < line_count - 1; ++i) {
     char **ops = split(lines[i], " ", count);
     for (size_t j = 0; j < *count; ++j) {
-      eqs[j].operand[i] = atoi(ops[j]);
+      eqs[j].operands[i] = atoi(ops[j]);
     }
     free_lines(ops, *count);
   }
@@ -64,9 +85,9 @@ uint64_t part1(const char *input) {
 
     for (size_t j = 0; j < eq.operand_size; ++j) {
       if (eq.operator == '+')
-        ans += (uint64_t)eq.operand[j];
+        ans += (uint64_t)eq.operands[j];
       else
-        ans *= (uint64_t)eq.operand[j];
+        ans *= (uint64_t)eq.operands[j];
     }
     sum += ans;
   }
@@ -75,7 +96,88 @@ uint64_t part1(const char *input) {
   return sum;
 }
 
-uint64_t part2(const char *input) { return 0; }
+Equation *get_ops(char *opline, size_t *eqcount) {
+  split(opline, " ", eqcount);
+
+  Equation *eqs = malloc(*eqcount * sizeof(Equation));
+  size_t p = 0;
+
+  for (size_t eqidx = 0; eqidx < *eqcount; ++eqidx) {
+    Equation *eq = &eqs[eqidx];
+    eq->operator = opline[p];
+    size_t opcount = 0;
+
+    do {
+      p++;
+      opcount++;
+    } while (opline[p] == ' ');
+
+
+    eq->operand_size = opcount + (eqidx == *eqcount - 1 ? 1 : -1); // account for whitespace between cols
+    eq->operands = malloc(eq->operand_size * sizeof(int));
+  }
+
+  return eqs;
+}
+
+void get_operands(char **lines, size_t line_count, Equation *eqs, size_t eqcount) {
+  size_t p = 0;
+
+  for (size_t eqidx = 0; eqidx < eqcount; ++eqidx) {
+    Equation *eq = &(eqs[eqidx]);
+
+    for (size_t opidx = 0; opidx < eq->operand_size; ++opidx) {
+      char *buf = malloc(sizeof(char) * line_count);
+      char digit = 0;
+      size_t digits = 0;
+      for (size_t lidx = 0; lidx < line_count - 1; ++lidx) {
+        digit = lines[lidx][p];
+        if (digit == ' ') {
+          continue;
+        }
+        buf[digits] = digit;
+        digits++;
+      }
+      buf[digits] = '\0';
+      eq->operands[opidx] = atoi(buf);
+      p++;
+    }
+    p++; // whitespace between cols
+  }
+}
+
+Equation *part2_parse_input(const char *input, size_t *count) {
+  size_t line_count = 0;
+  char **lines = split(input, "\n", &line_count);
+
+  Equation *eqs = get_ops(lines[line_count - 1], count);
+  get_operands(lines, line_count, eqs, *count);
+  debug_equations(eqs, *count);
+  return eqs;
+}
+
+uint64_t part2(const char *input) {
+  size_t count = 0;
+  Equation *eqs = part2_parse_input(input, &count);
+
+  uint64_t sum = 0;
+
+  for (size_t i = 0; i < count; ++i) {
+    Equation eq = eqs[i];
+    uint64_t ans = eq.operator == '+' ? 0 : 1;
+
+    for (size_t j = 0; j < eq.operand_size; ++j) {
+      if (eq.operator == '+')
+        ans += (uint64_t)eq.operands[j];
+      else
+        ans *= (uint64_t)eq.operands[j];
+    }
+    sum += ans;
+  }
+
+  free_equations(eqs, count);
+  return sum;
+}
 
 void test() {
   const char *test_input =
@@ -86,7 +188,16 @@ void test() {
       "*   +   *   +  ";
 
   ASSERT_EQ(4277556, part1(test_input));
-  ASSERT_EQ(0, part2(test_input));
+  /* ASSERT_EQ(3263827, part2(test_input)); */
+
+  const char *test_input2 = "93\n"
+                            "41\n"
+                            "93\n"
+                            " 3\n"
+                            "+ ";
+  /* ASSERT_EQ(4082, part2(test_input2)); */
+  /* ASSERT_EQ(2, 3); */
+
   printf("All tests passed!\n");
 }
 

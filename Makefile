@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wconversion -fPIC
 RELEASE_CFLAGS = -Wall -Wextra -Wconversion -O2 -DNDEBUG -fPIC
-DEBUG_CFLAGS = -Wall -Wextra -Wconversion -fPIC -g -Og
+DEBUG_CFLAGS = -Wall -Wextra -Wconversion -g -O0 -U_FORTIFY_SOURCE
 LDFLAGS = -ldl -lm
 SRC_DIR = src
 BUILD_DIR = build
