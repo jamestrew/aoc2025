@@ -21,35 +21,32 @@ int floor_div(int a, int b);
 int numfromchars(int count, ...);
 void quicksort(int *arr, size_t len);
 
-#define ASSERT_EQ(expected, actual) \
-  do { \
-    long long exp = (long long)(expected); \
-    long long act = (long long)(actual); \
-    if (exp != act) { \
-      fprintf(stderr, "%s:%d: ASSERT_EQ failed: expected %lld, got %lld\n", \
-              __FILE__, __LINE__, exp, act); \
-      exit(1); \
-    } \
-  } while(0)
+#define ASSERT_EQ(expected, actual)                                                                                    \
+  do {                                                                                                                 \
+    long long exp = (long long)(expected);                                                                             \
+    long long act = (long long)(actual);                                                                               \
+    if (exp != act) {                                                                                                  \
+      fprintf(stderr, "%s:%d: ASSERT_EQ failed: expected %lld, got %lld\n", __FILE__, __LINE__, exp, act);             \
+      exit(1);                                                                                                         \
+    }                                                                                                                  \
+  } while (0)
 
-#define ASSERT_STR_EQ(expected, actual) \
-  do { \
-    const char *exp = (expected); \
-    const char *act = (actual); \
-    if (strcmp(exp, act) != 0) { \
-      fprintf(stderr, "%s:%d: ASSERT_STR_EQ failed: expected \"%s\", got \"%s\"\n", \
-              __FILE__, __LINE__, exp, act); \
-      exit(1); \
-    } \
-  } while(0)
+#define ASSERT_STR_EQ(expected, actual)                                                                                \
+  do {                                                                                                                 \
+    const char *exp = (expected);                                                                                      \
+    const char *act = (actual);                                                                                        \
+    if (strcmp(exp, act) != 0) {                                                                                       \
+      fprintf(stderr, "%s:%d: ASSERT_STR_EQ failed: expected \"%s\", got \"%s\"\n", __FILE__, __LINE__, exp, act);     \
+      exit(1);                                                                                                         \
+    }                                                                                                                  \
+  } while (0)
 
-#define ASSERT_TRUE(expr) \
-  do { \
-    if (!(expr)) { \
-      fprintf(stderr, "%s:%d: ASSERT_TRUE failed: %s\n", \
-              __FILE__, __LINE__, #expr); \
-      exit(1); \
-    } \
-  } while(0)
+#define ASSERT_TRUE(expr)                                                                                              \
+  do {                                                                                                                 \
+    if (!(expr)) {                                                                                                     \
+      fprintf(stderr, "%s:%d: ASSERT_TRUE failed: %s\n", __FILE__, __LINE__, #expr);                                   \
+      exit(1);                                                                                                         \
+    }                                                                                                                  \
+  } while (0)
 
 #endif
