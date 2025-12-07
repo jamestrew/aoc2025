@@ -21,6 +21,11 @@ int floor_div(int a, int b);
 int numfromchars(int count, ...);
 void quicksort(int *arr, size_t len);
 
+void alloc_flat_2d(void ***rows_out, void **flat_out, size_t rows, size_t cols, size_t elem_size);
+
+#define alloc_flat(T, rows, cols, ptr2d, flatptr)                                                                      \
+  alloc_flat_2d((void ***)&(ptr2d), (void **)&(flatptr), (rows), (cols), sizeof(T))
+
 #define ASSERT_EQ(expected, actual)                                                                                    \
   do {                                                                                                                 \
     long long exp = (long long)(expected);                                                                             \

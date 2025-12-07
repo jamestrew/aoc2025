@@ -156,3 +156,15 @@ void quicksort(int *arr, size_t len) {
   quicksort(arr, i);
   quicksort(arr + i, len - i);
 }
+
+void alloc_flat_2d(void ***rows_out, void **flat_out, size_t rows, size_t cols, size_t elem_size) {
+  void **rows_ptrs = malloc(rows * sizeof(void *));
+  void *flat = malloc(rows * cols * elem_size);
+
+  for (size_t r = 0; r < rows; r++) {
+    rows_ptrs[r] = (char *)flat + r * cols * elem_size;
+  }
+
+  *rows_out = rows_ptrs;
+  *flat_out = flat;
+}
