@@ -97,7 +97,8 @@ uint64_t part1(const char *input) {
 }
 
 Equation *get_ops(char *opline, size_t *eqcount) {
-  split(opline, " ", eqcount);
+  char **tokens = split(opline, " ", eqcount);
+  free_lines(tokens, *eqcount);
 
   Equation *eqs = malloc(*eqcount * sizeof(Equation));
   size_t p = 0;
@@ -105,15 +106,15 @@ Equation *get_ops(char *opline, size_t *eqcount) {
   for (size_t eqidx = 0; eqidx < *eqcount; ++eqidx) {
     Equation *eq = &eqs[eqidx];
     eq->operator = opline[p];
-    size_t opcount = 0;
+    size_t opcount = 1;
 
     do {
       p++;
-      opcount++;
+      if (opline[p] == ' ')
+        opcount++;
     } while (opline[p] == ' ');
 
-
-    eq->operand_size = opcount + (eqidx == *eqcount - 1 ? 1 : -1); // account for whitespace between cols
+    eq->operand_size = (eqidx == *eqcount - 1) ? opcount : opcount - 1;
     eq->operands = malloc(eq->operand_size * sizeof(int));
   }
 
@@ -127,7 +128,7 @@ void get_operands(char **lines, size_t line_count, Equation *eqs, size_t eqcount
     Equation *eq = &(eqs[eqidx]);
 
     for (size_t opidx = 0; opidx < eq->operand_size; ++opidx) {
-      char *buf = malloc(sizeof(char) * line_count);
+      char buf[32];
       char digit = 0;
       size_t digits = 0;
       for (size_t lidx = 0; lidx < line_count - 1; ++lidx) {
@@ -188,16 +189,7 @@ void test() {
       "*   +   *   +  ";
 
   ASSERT_EQ(4277556, part1(test_input));
-  /* ASSERT_EQ(3263827, part2(test_input)); */
-
-  const char *test_input2 = "93\n"
-                            "41\n"
-                            "93\n"
-                            " 3\n"
-                            "+ ";
-  /* ASSERT_EQ(4082, part2(test_input2)); */
-  /* ASSERT_EQ(2, 3); */
-
+  ASSERT_EQ(3263827, part2(test_input));
   printf("All tests passed!\n");
 }
 
